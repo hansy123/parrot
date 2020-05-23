@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hsy.parrot.student.dao.StudentMapper">
+
+    <resultMap id="studentResultMap" type="com.hsy.parrot.bean.student.Student">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="age" property="age"/>
+        <result column="sex" property="sex"/>
+        <result column="age_stage" property="ageStage"/>
+        <result column="clazz_id" property="clazzId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="version" property="version"/>
+        <association property="clazzObj" column="clazz_id"
+                     select="com.hsy.parrot.clazz.dao.ClazzMapper.getClazzById"></association>
+    </resultMap>
+
+    <resultMap id="studentResultMapWithOutClazzObj" type="com.hsy.parrot.bean.student.Student">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="age" property="age"/>
+        <result column="sex" property="sex"/>
+        <result column="age_stage" property="ageStage"/>
+        <result column="clazz_id" property="clazzId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="version" property="version"/>
+    </resultMap>
+
+    <select id="getAllStudentList" resultMap="studentResultMap">
+        SELECT id, NAME,age,clazz_id,create_time,version,
+        CASE sex
+        WHEN 1 THEN
+        '男' ELSE '女'
+        END sex,
+        CASE
+        WHEN age BETWEEN 0
+        AND 2.5 THEN
+        '幼儿'
+        WHEN age BETWEEN 2.5
+        AND 6 THEN
+        '童年'
+        WHEN age &gt;= 6
+        AND age &lt; 17 THEN '少年' WHEN age &gt;= 17
+        AND age &lt; 40 THEN '青年' WHEN age &gt;= 41
+        AND age &lt; 48 THEN '壮年' WHEN age &gt;= 48
+        AND age &lt; 65 THEN '老年' WHEN age &gt;= 65
+        AND age &lt; 90 THEN
+        '老年' ELSE '长寿老人'
+        END age_stage
+        FROM
+        student
+    </select>
+
+    <select id="getStudentListByClazzId" resultMap="studentResultMapWithOutClazzObj">
+        SELECT id, NAME,age,clazz_id,create_time,version,
+        CASE sex
+        WHEN 1 THEN
+        '男' ELSE '女'
+        END sex,
+        CASE
+        WHEN age BETWEEN 0
+        AND 2.5 THEN
+        '幼儿'
+        WHEN age BETWEEN 2.5
+        AND 6 THEN
+        '童年'
+        WHEN age &gt;= 6
+        AND age &lt; 17 THEN '少年' WHEN age &gt;= 17
+        AND age &lt; 40 THEN '青年' WHEN age &gt;= 41
+        AND age &lt; 48 THEN '壮年' WHEN age &gt;= 48
+        AND age &lt; 65 THEN '老年' WHEN age &gt;= 65
+        AND age &lt; 90 THEN
+        '老年' ELSE '长寿老人'
+        END age_stage
+        FROM
+        student
+        where clazz_id = #{clazzId}
+    </select>
+
+    <insert id="insertStudentList">
+        INSERT INTO student(name,age,sex,clazz_id,version) VALUES
+        <foreach collection="studentList" item="stu" separator=",">
+            (#{stu.name},#{stu.age},#{stu.sex},#{clazzId},#{stu.version})
+        </foreach>
+    </insert>
+
+</mapper>

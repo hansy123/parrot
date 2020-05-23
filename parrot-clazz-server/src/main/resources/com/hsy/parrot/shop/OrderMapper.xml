@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hsy.parrot.shop.dao.OrderDao">
+
+    <insert id="addOrder">
+
+        INSERT INTO t_order(order_number,fruits_code,price,count) VALUES(
+        #{der.orderNumber},
+        #{der.fruitsCode},
+        #{der.price},
+        #{der.count}
+        )
+    </insert>
+
+    <update id="updateFruits">
+        UPDATE fruits SET lock_count = (lock_count + #{der.count}) WHERE code = #{der.fruitsCode}
+    </update>
+
+    <select id="getFruits" resultType="com.hsy.parrot.bean.fruits.Apple">
+          SELECT count,code,lock_count AS lockCount,surplus_count AS surplusCount FROM fruits WHERE code = #{fruitsCode};
+    </select>
+    <select id="getApples" resultType="com.hsy.parrot.bean.fruits.Apple">
+        SELECT id,code,name,price,count,lock_count AS lockCount,surplus_count AS surplusCount,create_time AS createTime,update_time as updateTime FROM fruits
+    </select>
+</mapper>

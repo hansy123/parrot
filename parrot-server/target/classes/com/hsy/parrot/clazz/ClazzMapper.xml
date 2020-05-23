@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hsy.parrot.clazz.dao.ClazzMapper">
+
+    <resultMap id="clazzResultMap" type="com.hsy.parrot.bean.clazz.Clazz" >
+        <result column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="version" property="version" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <select id="getClazzById" resultMap="clazzResultMap">
+
+        select id,name,create_time,version from clazz where id = #{id}
+
+    </select>
+</mapper>

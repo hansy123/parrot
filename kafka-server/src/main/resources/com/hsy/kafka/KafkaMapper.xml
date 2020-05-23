@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hsy.kafka.server.mapper.KafkaMapper">
+    <resultMap id="kafkaInMsgResultMap" type="com.hsy.parrot.bean.kafka.KafkaInMsg">
+        <result column="id" property="id"/>
+        <result column="fw_bh" property="fwBh"/>
+        <result column="message" property="message"/>
+        <result column="status" property="status"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_update" property="gmtUpdate"/>
+    </resultMap>
+
+    <update id="updateMessageStatus">
+        UPDATE xy_kafka_in_msg SET status = 2 ,gmt_update = NOW() WHERE fw_bh = SUBSTRING_INDEX(#{content},'_',1);
+    </update>
+
+    <insert id="recodeConsumer">
+        INSERT INTO xy_kafka_out_msg(fw_bh,message,deal_flag) VALUES(
+	        SUBSTRING_INDEX(#{content},'_',1),
+	        SUBSTRING_INDEX(#{content},'_',-1),
+	        1
+        )
+    </insert>
+</mapper>

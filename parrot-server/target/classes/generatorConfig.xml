@@ -1,0 +1,83 @@
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+    <!--  引用资源配置文件  -->
+    <properties resource="application.properties"/>
+
+    <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <property name="useMapperCommentGenerator" value="false"/>
+
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <!-- 配置后生成的 Mapper 接口都会自动继承接口 value: 需要继承的接口, 该接口不可以在 MapperScan 扫描范围中-->
+            <property name="mappers" value="com.hsy.rabbit.IBaseCommMapper"/>
+            <!-- caseSensitive默认false，当数据库表名区分大小写时，可以将该属性设置为true -->
+            <property name="caseSensitive" value="true"/>
+            <property name="forceAnnotation" value="true"/>
+        </plugin>
+
+        <!--注意context内的文件要按序放-->
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!-- 数据库连接属性: -->
+        <jdbcConnection
+                driverClass="${spring.datasource.driver-class-name}"
+                connectionURL="${spring.datasource.url}"
+                userId="${spring.datasource.username}"
+                password="${spring.datasource.password}"/>
+
+        <javaTypeResolver>
+            <!-- 是否使用bigDecimal， false可自动转化以下类型（Long, Integer, Short, etc.） -->
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- MyBatis 生成器生成 po -->
+        <javaModelGenerator targetPackage="com.hsy.rabbit.student.po"
+                            targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- MyBatis 生成器生成 Mapper XML -->
+        <sqlMapGenerator targetPackage="com.hsy.rabbit.student.mapper"
+                         targetProject="src/main/resources">
+            <property name="trimStrings" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- MyBatis 生成器生成 Mapper class dao-->
+        <javaClientGenerator targetPackage="com.hsy.rabbit.student.mapper"
+                             targetProject="src/main/java"
+                             type="XMLMAPPER">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!--   需要生成的表名,  % 为通配符, -->
+        <!--<table tableName="student">-->
+            <!--<generatedKey column="id"-->
+                          <!--sqlStatement="select SEQ_{1}.nextval from student"-->
+                          <!--identity="false" type="pre"/>-->
+        <!--</table>-->
+        <table tableName="student" domainObjectName="StudentPo"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false">
+            <generatedKey column="id" sqlStatement="select SEQ_{1}.nextval from student" identity="false" type="pre"/>
+        </table>
+        <table tableName="clazz" domainObjectName="ClazzPo"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false">
+            <generatedKey column="id" sqlStatement="select SEQ_{1}.nextval from clazz" identity="false" type="pre"/>
+        </table>
+    </context>
+</generatorConfiguration>
